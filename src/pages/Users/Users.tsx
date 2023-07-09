@@ -1,16 +1,23 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import useDebounce from '@/hooks/useDebounce';
 import { formatDate } from '@/lib/helper';
 import { useUsersQuery } from '@/services/queries/user.query';
+import { useRepoQuery } from '@/services/queries/repo.query';
 import { type User } from '@/types/user';
+import { type GetRepoProps, type Repo } from '@/types/repo';
 import Accordion from '@/components/Accordion';
 import { AccordionData } from '@/components/Accordion/accordion.type';
 import { date } from 'yup';
 
 export type Filter = { page: number; search?: string };
+export type Url = { repo_url: string };
 
 export interface UserListProps {
   users: User[];
+}
+
+export interface RepoListProps {
+  repo: Repo[];
 }
 
 const UserList: React.FC<UserListProps> = ({ users }) => {
@@ -22,7 +29,7 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
     <>
       {users.map((user) => (
         <div
-          key={user.login}
+          key={user.id}
           className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3"
         >
           <article className="overflow-hidden rounded-lg shadow-lg">
@@ -94,15 +101,61 @@ const UserList: React.FC<UserListProps> = ({ users }) => {
   );
 };
 
+
+const RepoList: React.FC<RepoListProps> = ({ repo }) => {
+  console.log("LOL", repo)
+  if (!repo?.length) {
+    return <div>No repository found in this user</div>
+  }
+  
+  return (
+    <>
+      {repo.map((item,key) => (
+        <div
+          key={key}
+          className='my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3'
+        >
+          <article className="overflow-hidden rounded-lg shadow-lg">
+            <header className="flex items-center justify-between leading-tight p-2 md:p-4">
+                <h1 className="text-lg">
+                  <a
+                    className="no-underline hover:underline text-black"
+                    href={item.html_url}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {item.name}
+                  </a>
+                </h1>
+                <p className="text-grey-darker text-sm">
+                  {formatDate(item.created_at)}
+                </p>
+                <p className="text-sm">
+                  {item.description}
+                </p>
+                <div>
+                  <span>Language: {item.language}</span>
+                  <span>Forks: {item.forks_count}</span>
+                  <span>Watcher: {item.watchers}</span>
+                </div>
+              </header>
+          </article>
+        </div>
+      ))}
+    </>
+  )
+}
+
+
 const UsersAccordion: React.FC<UserListProps> = ({ users }) => {
   if (!users?.length) {
     return <div>No users found</div>;
   }
   let dataUsers: AccordionData[] = []
-
-  const parentHandleChange = (e: any) => {
-    console.log("Accordion klik idx", e);
-  };
+  let repoUrl: GetRepoProps = {
+    repo_url: ''
+  }
+  let idx: number = 0
 
   users.map(item => {
     let data: AccordionData = {
@@ -112,11 +165,23 @@ const UsersAccordion: React.FC<UserListProps> = ({ users }) => {
       repos_url: item.repos_url,
       content: (<></>)
     }
-    
-
     dataUsers.push(data)
   })
 
+  const { isLoading, data, refetch } = useRepoQuery(repoUrl);
+
+  const parentHandleChange = async (e: any) => {
+    idx = e
+    repoUrl['repo_url'] = dataUsers[e]['repos_url']
+    await refetch().then(() =>{
+      dataUsers[idx]['content'] = isLoading ? (<div>Loading...</div>) : (
+        <RepoList repo={data}/>
+      );
+    })
+    console.log("DATA REPOO", data, isLoading)
+    
+  };
+  
   return (
     <>
       <Accordion handleClick={parentHandleChange} items={dataUsers}/>

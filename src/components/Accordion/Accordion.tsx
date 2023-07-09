@@ -12,7 +12,10 @@ const Accordion = ({ items, handleClick }: AccordionProps) => {
   const [currentIdx, setCurrentIdx] = useState(-1);
   const btnOnClick = (idx: number) => {
     setCurrentIdx((currentValue) => (currentValue !== idx ? idx : -1));
-    handleClick(idx)
+    
+      handleClick(idx)
+    
+    
   };
 
   return (

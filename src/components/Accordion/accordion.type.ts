@@ -5,5 +5,5 @@ export type AccordionData = {
     url: string;
     avatar_url: string;
     repos_url: string;
-    content: ReactNode;
+    content: any;
 };
