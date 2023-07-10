@@ -15,7 +15,7 @@
     "commit": "git-cz",
     "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){process.exit(1)} \" || husky install",
     "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d build"
+    "deploy" : "gh-pages -d dist"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
@@ -23,7 +23,7 @@
       "npm run format"
     ]
   },
-  "homepage":"http://donaderoyan.github.io/github-repositories-explorer",
+  "homepage":"http://donaderoyan.github.io/GitHub-Repositories-Explorer",
   "dependencies": {
     "@hookform/resolvers": "^3.1.0",
     "@tanstack/react-query": "^4.29.3",
