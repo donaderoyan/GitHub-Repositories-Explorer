@@ -18,92 +18,15 @@ export interface UserListProps {
 
 export interface RepoListProps {
   repo: Repo[];
+  isLoading: boolean;
 }
 
-const UserList: React.FC<UserListProps> = ({ users }) => {
-  if (!users?.length) {
-    return <div>No users found</div>;
+const RepoList: React.FC<RepoListProps> = ({ repo, isLoading }) => {
+
+  if(isLoading) {
+    <div>Loading...</div>
   }
 
-  return (
-    <>
-      {users.map((user) => (
-        <div
-          key={user.id}
-          className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3"
-        >
-          <article className="overflow-hidden rounded-lg shadow-lg">
-            <a href={user.url} target="_blank" rel="noreferrer">
-              {user.avatar_url ? (
-                <img
-                  alt="Placeholder"
-                  className="block h-auto w-full"
-                  src={user.avatar_url}
-                />
-              ) : (
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-[215px] w-[370px] bg-gray-100"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  />
-                </svg>
-              )}
-            </a>
-
-            <header className="flex items-center justify-between leading-tight p-2 md:p-4">
-              <h1 className="text-lg">
-                <a
-                  className="no-underline hover:underline text-black"
-                  href={user.url}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {user.login}
-                </a>
-              </h1>
-              {/* <p className="text-grey-darker text-sm">
-                {formatDate(user.pubDate)}
-              </p> */}
-            </header>
-
-            <footer className="flex items-center justify-between leading-none p-2 md:p-4">
-              <a
-                className="flex items-center no-underline hover:underline text-black"
-                href="#"
-              >
-                <img
-                  alt="Placeholder"
-                  className="block rounded-full"
-                  src="https://picsum.photos/32/32/?random"
-                />
-                <p className="ml-2 text-sm">Author Name</p>
-              </a>
-              <a
-                className="no-underline text-grey-darker hover:text-red-dark"
-                href="#"
-              >
-                <span className="hidden">Like</span>
-                <i className="fa fa-heart"></i>
-              </a>
-            </footer>
-          </article>
-        </div>
-      ))}
-    </>
-  );
-};
-
-
-const RepoList: React.FC<RepoListProps> = ({ repo }) => {
-  console.log("LOL", repo)
   if (!repo?.length) {
     return <div>No repository found in this user</div>
   }
@@ -113,7 +36,7 @@ const RepoList: React.FC<RepoListProps> = ({ repo }) => {
       {repo.map((item,key) => (
         <div
           key={key}
-          className='my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3'
+          className="my-1 px-1 w-full"
         >
           <article className="overflow-hidden rounded-lg shadow-lg">
             <header className="flex items-center justify-between leading-tight p-2 md:p-4">
@@ -127,18 +50,20 @@ const RepoList: React.FC<RepoListProps> = ({ repo }) => {
                     {item.name}
                   </a>
                 </h1>
-                <p className="text-grey-darker text-sm">
-                  {formatDate(item.created_at)}
-                </p>
-                <p className="text-sm">
-                  {item.description}
-                </p>
-                <div>
-                  <span>Language: {item.language}</span>
-                  <span>Forks: {item.forks_count}</span>
-                  <span>Watcher: {item.watchers}</span>
-                </div>
+                <span className="text-grey-darker text-sm">
+                    {formatDate(item.created_at)}
+                </span>
               </header>
+              <div className="p-2 my-1 md:p-4">
+                  <p className="text-sm mb-1">
+                    {item.description}
+                  </p>
+                  <div>
+                    <span><strong>Language:</strong> {item.language}</span>
+                    <span className="px-1"><strong>Forks:</strong> {item.forks_count}</span>
+                    <span className="px-1"><strong>Watcher:</strong> {item.watchers}</span>
+                  </div>
+              </div>
           </article>
         </div>
       ))}
@@ -168,23 +93,19 @@ const UsersAccordion: React.FC<UserListProps> = ({ users }) => {
     dataUsers.push(data)
   })
 
-  const { isLoading, data, refetch } = useRepoQuery(repoUrl);
+  const { isFetching ,isLoading, data, refetch } = useRepoQuery(repoUrl);
 
   const parentHandleChange = async (e: any) => {
     idx = e
     repoUrl['repo_url'] = dataUsers[e]['repos_url']
-    await refetch().then(() =>{
-      dataUsers[idx]['content'] = isLoading ? (<div>Loading...</div>) : (
-        <RepoList repo={data}/>
-      );
-    })
-    console.log("DATA REPOO", data, isLoading)
-    
+    await refetch()
   };
   
   return (
     <>
-      <Accordion handleClick={parentHandleChange} items={dataUsers}/>
+      <Accordion handleClick={parentHandleChange} items={dataUsers} isLoading={isLoading}> 
+        <RepoList repo={data} isLoading={isFetching}/>
+      </Accordion>
     </>
   );
 };

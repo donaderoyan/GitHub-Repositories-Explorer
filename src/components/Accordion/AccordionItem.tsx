@@ -1,29 +1,43 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { getRefValue } from '@/hooks/refValue';
 import { AccordionData } from './accordion.type';
 import './AccordionItem.css';
 
-function AccordionItem({
-  data,
-  isOpen,
-  btnOnClick,
-}: {
+interface AccordionItemProps {
   data: AccordionData;
+  isLoading: boolean;
   isOpen: boolean;
   btnOnClick: () => void;
-}) {
+  children: React.ReactNode;
+}
+
+const AccordionItem = ({isOpen, data, btnOnClick, isLoading, children} : AccordionItemProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState(0);
+  
 
-  useEffect(() => {
-    if (isOpen) {
-      const contentEl = getRefValue(contentRef);
+  // useEffect(() => {
+  //   if (isOpen) {
+  //     const contentEl = getRefValue(contentRef);
 
-      setHeight(contentEl.scrollHeight);
-    } else {
-      setHeight(0);
-    }
-  }, [isOpen]);
+  //     setHeight(contentEl.scrollHeight);
+  //   } else {
+  //     setHeight(0);
+  //   }
+  // }, [isOpen]);
+
+  useMemo(() => {
+      if(Object.keys(data).length !== 0) {
+        if (isOpen) {
+          const contentEl = getRefValue(contentRef);
+    
+          setHeight(1);
+        } else {
+          setHeight(0);
+        }
+        
+      } 
+    }, [data, isOpen]);
 
   return (
     <li className={`accordion-item ${isOpen ? 'active' : ''}`}>
@@ -48,9 +62,15 @@ function AccordionItem({
           </div>
         </div>
       </div>
-      <div className="accordion-item-container" style={{ height }}>
+      <div className="accordion-item-container" style={{ height: height == 1 ? "auto" : 0}}>
         <div ref={contentRef} className="accordion-item-content">
-          {data.content}
+          {!isOpen ? (
+            <></>
+          ) : (
+            <>
+                {children}
+            </>
+          )}
         </div>
       </div>
     </li>
@@ -58,3 +78,4 @@ function AccordionItem({
 }
 
 export default AccordionItem;
+

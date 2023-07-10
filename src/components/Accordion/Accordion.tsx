@@ -5,10 +5,12 @@ import './Accordion.css';
 
 interface AccordionProps {
   items: AccordionData[];
-  handleClick: Function
+  handleClick: Function;
+  children: React.ReactNode;
+  isLoading: boolean;
 }
 
-const Accordion = ({ items, handleClick }: AccordionProps) => {
+const Accordion = ({ items, handleClick, isLoading, children }: AccordionProps) => {
   const [currentIdx, setCurrentIdx] = useState(-1);
   const btnOnClick = (idx: number) => {
     setCurrentIdx((currentValue) => (currentValue !== idx ? idx : -1));
@@ -25,8 +27,11 @@ const Accordion = ({ items, handleClick }: AccordionProps) => {
           key={idx}
           data={item}
           isOpen={idx === currentIdx}
+          isLoading={isLoading}
           btnOnClick={() => btnOnClick(idx)}
-        />
+        >
+          {children}
+        </AccordionItem>
       ))}
     </ul>
   );

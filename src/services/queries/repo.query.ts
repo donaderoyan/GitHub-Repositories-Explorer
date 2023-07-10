@@ -7,7 +7,6 @@ import { getRepo } from '../api/repo.service';
 
 export const useRepoQuery = (params: GetRepoProps) => 
     useQuery<GetRepoResponse>(['getRepo', { params }], async () => {
-        console.log('PARAM REPO', params)
         if(params.repo_url?.length == 0) {return {}}
         const res = await getRepo(params);
         return res;
