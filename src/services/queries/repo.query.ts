@@ -9,5 +9,7 @@ export const useRepoQuery = (params: GetRepoProps) =>
     useQuery<GetRepoResponse>(['getRepo', { params }], async () => {
         if(params.repo_url?.length == 0) {return {}}
         const res = await getRepo(params);
-        return res;
-    }, {manual: true,});
+        let data: any = {}
+        data.items = res
+        return data;
+    });

@@ -1,6 +1,5 @@
 export interface GetUserResponse {
-  total_count: number;
-  items: User[];
+  items?: User[];
 }
 
 export interface GetUsersProps {

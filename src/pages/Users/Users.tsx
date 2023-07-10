@@ -8,6 +8,7 @@ import { type GetRepoProps, type Repo } from '@/types/repo';
 import Accordion from '@/components/Accordion';
 import { AccordionData } from '@/components/Accordion/accordion.type';
 import { date } from 'yup';
+/* eslint-disable no-use-before-define */
 
 export type Filter = { page: number; search?: string };
 export type Url = { repo_url: string };
@@ -104,7 +105,7 @@ const UsersAccordion: React.FC<UserListProps> = ({ users }) => {
   return (
     <>
       <Accordion handleClick={parentHandleChange} items={dataUsers} isLoading={isLoading}> 
-        <RepoList repo={data} isLoading={isFetching}/>
+        <RepoList repo={data?.items ?? []} isLoading={isFetching}/>
       </Accordion>
     </>
   );

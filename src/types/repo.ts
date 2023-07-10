@@ -1,5 +1,5 @@
 export interface GetRepoResponse {
-    items: Repo[];
+    items?: Repo[];
 }
 
 export interface GetRepoProps {
