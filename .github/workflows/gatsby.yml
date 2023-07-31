@@ -1,6 +1,10 @@
 # Simple workflow for deploying static content to GitHub Pages
 name: Deploy static content to Pages
 
+env:
+  VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT }}
+  VITE_API_GITHUB_READ_TOKEN:  ${{ secrets.VITE_API_GITHUB_READ_TOKEN }}
+
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -26,8 +30,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-          #VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT }}
-          #VITE_API_GITHUB_READ_TOKEN:  ${{ secrets.VITE_API_GITHUB_READ_TOKEN }}
+          
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
