@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { getRefValue } from '@/hooks/refValue';
 import { AccordionData } from './accordion.type';
-import './AccordionItem.css';
+import './accordionItem.css';
 
 interface AccordionItemProps {
   data: AccordionData;
