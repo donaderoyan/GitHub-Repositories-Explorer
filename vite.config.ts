@@ -7,4 +7,5 @@ import { PWAConfig } from './src/lib/config';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), VitePWA(PWAConfig)],
+  base: '/github-repositories-explorer/'
 });
