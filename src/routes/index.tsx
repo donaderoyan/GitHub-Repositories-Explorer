@@ -1,11 +1,11 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 import Users from '../pages/Users';
 import Home from '../pages/Home';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
 const Router = () => (
-  <BrowserRouter>
+  <HashRouter basename='/'>
     <Routes>
       <Route
         path="/"
@@ -24,7 +24,7 @@ const Router = () => (
         }
       />
     </Routes>
-  </BrowserRouter>
+  </HashRouter>
 );
 
 export default Router;

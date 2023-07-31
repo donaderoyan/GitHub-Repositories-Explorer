@@ -48,7 +48,7 @@ const RepoList: React.FC<RepoListProps> = ({ repo, isLoading }) => {
                     target="_blank"
                     rel="noreferrer"
                   >
-                    {item.name}
+                    <strong>{item.name}</strong>
                   </a>
                 </h1>
                 <span className="text-grey-darker text-sm">
