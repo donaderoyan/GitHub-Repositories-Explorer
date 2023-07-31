@@ -1,9 +1,11 @@
 {
-  "homepage":"http://donaderoyan.github.io/github-repositories-explorer",
+  "homepage":"https://donaderoyan.github.io/github-repositories-explorer",
   "name": "react-test",
   "version": "0.0.4",
   "scripts": {
     "start": "npm run build:css && concurrently \"npm run watch:css\" \"vite\"",
+    "predeploy" : "npm run build",
+    "deploy" : "gh-pages -d dist",
     "watch:css": "npx tailwindcss -i ./src/index.css -o ./src/styles.css --watch",
     "build:css": "npx tailwindcss -i ./src/index.css -o ./src/styles.css",
     "build": "tsc && npm run build:css && vite build",
@@ -14,9 +16,7 @@
     "test": "jest",
     "release": "standard-version",
     "commit": "git-cz",
-    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){process.exit(1)} \" || husky install",
-    "predeploy" : "npm run build",
-    "deploy" : "gh-pages -d dist"
+    "prepare": "node -e \"if (process.env.NODE_ENV !== 'production'){process.exit(1)} \" || husky install"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx}": [
