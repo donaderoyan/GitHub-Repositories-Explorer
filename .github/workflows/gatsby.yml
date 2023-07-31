@@ -29,10 +29,6 @@ defaults:
   run:
     shell: bash
 
-env:
-  VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT }}
-  VITE_API_GITHUB_READ_TOKEN:  ${{ secrets.VITE_API_GITHUB_READ_TOKEN }}
-
 jobs:
   # Build job
   build:
@@ -55,6 +51,9 @@ jobs:
             echo "Unable to determine package manager"
             exit 1
           fi
+        env:
+          VITE_API_ENDPOINT: ${{ secrets.VITE_API_ENDPOINT }}
+          VITE_API_GITHUB_READ_TOKEN:  ${{ secrets.VITE_API_GITHUB_READ_TOKEN }}
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
